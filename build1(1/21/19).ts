@@ -6,7 +6,7 @@ class Player {
     firstServeTotal: number = 0;
     firstServePercentage: number = 0;
     numberofAces: number = 0;
-    numberofPockets:number = 0;
+    numberOfFaults:number = 0;
     secondServeTotal: number = 0;
     secondServeMade: number = 0;
     secondServeAces: number = 0;
@@ -155,19 +155,17 @@ teamServing = team1;
 while (isServing === intialServer && team1.score < gameTo) {
     serve = 1;
     isServing.firstServeTotal += 1;
-    let firstServeResult = await promptString("P, M, A, IP?");
-    if ( firstServeResult === "P") {
-        pocket();
-        let secondServeResult = await promptString("P, M, A, IP?");
-        if (secondServeResult === "P") {
-            pocket();
-        } else if ( secondServeResult === "M") {
-            miss();
+    let firstServeResult = await promptString("F, A, IP?");
+    if ( firstServeResult === "F") {
+        fault();
+        let secondServeResult = await promptString("F, A, IP?");
+        if (secondServeResult === "F") {
+            fault();
         } else if ( secondServeResult === "A") {
             ace();
+        } else {
+            inPlay();
         }
-    } else if ( firstServeResult === "M") {
-        miss();
     } else if ( firstServeResult === "A") {
         ace();
     } else {
@@ -231,19 +229,17 @@ while ((team1.score < gameTo && team2.score < gameTo) || ((team1.score - team2.s
     serve = 1;
     numberOfShotsIP = 0;
     isServing.firstServeTotal += 1;
-    let firstServeResult = await promptString("P, M, A, IP?");
-    if ( firstServeResult === "P") {
-        pocket();
-        let secondServeResult = await promptString("P, M, A, IP?");
-        if (secondServeResult === "P") {
-            pocket();
-        } else if ( secondServeResult === "M") {
-            miss();
+    let firstServeResult = await promptString("F, A, IP?");
+    if ( firstServeResult === "F") {
+        fault();
+        let secondServeResult = await promptString("F, A, IP?");
+        if (secondServeResult === "F") {
+            fault();
         } else if ( secondServeResult === "A") {
             ace();
+        } else {
+            inPlay()
         }
-    } else if ( firstServeResult === "M") {
-        miss();
     } else if ( firstServeResult === "A") {
         ace();
     } else {
@@ -388,20 +384,15 @@ export let swapServer = (sO: Player[]): Player => {
     return sO[0];
 };
 // Called on pocket serve
-export let pocket = ():void => {
+export let fault = ():void => {
     if (serve === 1) {
     isServing.secondServeTotal += 1;
-    isServing.numberofPockets += 1;
+    isServing.numberOfFaults += 1;
     serve += 1;
     } else {
-        miss();
+        pointWinner = teamServingOrder[1];
     }
-    print(isServing.denotation + " pocket");
-};
-
-// Called on missed serve
-export let miss = ():void => {
-    pointWinner = teamServingOrder[1];
+    print(isServing.denotation + " fault");
 };
 
 // Called on Ace
