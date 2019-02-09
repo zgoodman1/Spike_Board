@@ -6,7 +6,7 @@ class Player {
     firstServeTotal: number = 0;
     firstServePercentage: number = 0;
     numberofAces: number = 0;
-    numberofPockets:number = 0;
+    numberOfFaults:number = 0;
     secondServeTotal: number = 0;
     secondServeMade: number = 0;
     secondServeAces: number = 0;
@@ -26,9 +26,6 @@ class Player {
     hittingPercentage: number = 0;
     killPercentage: number = 0;
 
-    constructor (name: string) {
-        this.denotation = name;
-    }
 
     ace() {
         this.numberofAces += 1;
@@ -58,9 +55,6 @@ class Team {
     player1: Player;
     player2: Player;
 
-    constructor (n:string) {
-        this.name = n;
-    }
 }
 
 class Point {
@@ -96,39 +90,65 @@ let attackingPlayer: Player;
 let ballInPlay: boolean;
 let numberOfShotsIP: number = 0;
 let numberOfRallies: number = 0;
+let tempPlayer1: Player;
+let tempPlayer2: Player;
+let tempPlayer3: Player;
+let tempPlayer4: Player;
+let resetInput = false;
+let team1 = new Team();
+let team2 = new Team();
+let player1 = new Player();
+let player2 = new Player();
+let player3 = new Player();
+let player4 = new Player();
 
 export let main = async () => {   
-let team1 = new Team(await promptString("Team 1 name?"));
-let player1 = new Player(await promptString("Player 1 name?"));
-let player2 = new Player(await promptString("Player 2 name?"));
+team1.name = await promptString("Team 1 name?");
+player1.denotation = await promptString("Player 1 name?");
+player2.denotation = await promptString("Player 2 name?");
 team1.player1 = player1;
 team1.player2 = player2;
 
-let team2 = new Team(await promptString("Team 2 name?"));
-let player3 = new Player(await promptString("Player 3 name?"));
-let player4 = new Player(await promptString("Player 4 name?"));
+team2.name = await promptString("Team 2 name?");
+player3.denotation = await promptString("Player 3 name?");
+player4.denotation = await promptString("Player 4 name?");
 team2.player1 = player3;
 team2.player2 = player4;
 
 let gameTo = await promptNumber("Game to?");
 
 let whoIsServing = await promptNumber("Who is serving? Player 1 or 2");
-if (whoIsServing === 1) {
-
-    servingOrder = [player1, player3, player2, player4];
-    let whoIsReturning = await promptNumber("who is returning? player 3 or 4");
-    if (whoIsReturning === 3) {
-    returningOrder = [player3, player1, player4, player2];
-}   else {
-    returningOrder =  [player4, player1, player3, player2];
+if (whoIsServing == player1){
+    servingOrder = [player1, player3, player2, player4]
+    let returning = promptString("Who is returning? ")
+    if (returning == player3){
+        returningOrder = [player3, player1, player4, player2]
+    } else{
+        returningOrder = [player4, player2, player3, player1]
     }
-} else {
-    servingOrder = [player2, player3, player1, player4];
-    let whoIsReturning = await promptNumber("who is returning? player 3 or 4");
-    if (whoIsReturning === 3) {
-    returningOrder = [player3, player2, player4, player1];
-}   else {
-    returningOrder =  [player4, player2, player3, player1];
+} else if (whoIsServing == player2) {
+    servingOrder = [player2, player3, player1, player4]
+    let returning = promptString("Who is returning? ")
+    if (returning == player3){
+        returningOrder = [player3, player1, player4, player2]
+    } else{
+        returningOrder = [player4, player2, player3, player1]
+    }
+} else if( whoIsServing == player3) {
+    servingOrder = [player3, player1, player4, player2]
+    let returning = promptString("Who is returning? ")
+    if (returning == player1) {
+        returningOrder = [player1, player3, player2, player4]
+    } else{
+        returningOrder = [player2, player4, player1, player3]
+    }
+} else{
+    servingOrder = [player4, player1, player3, player2]
+    let returning = promptString("Who is returning? ")
+    if (returning == player2){
+        returningOrder = [player2, player3, player1, player4]
+    } else{
+        returningOrder = [player1, player4, player2, player3]
     }
 }
 isReturning = returningOrder[0];
@@ -138,21 +158,23 @@ teamServingOrder = [team1, team2];
 teamServing = team1;
 
 while (isServing === intialServer && team1.score < gameTo) {
+    tempPlayer1 = player1;
+    tempPlayer2 = player2;
+    tempPlayer3 = player3;
+    tempPlayer4 = player4;
     serve = 1;
     isServing.firstServeTotal += 1;
-    let firstServeResult = await promptString("P, M, A, IP?");
-    if ( firstServeResult === "P") {
-        pocket();
-        let secondServeResult = await promptString("P, M, A, IP?");
-        if (secondServeResult === "P") {
-            pocket();
-        } else if ( secondServeResult === "M") {
-            miss();
+    let firstServeResult = await promptString("F, A, IP?");
+    if ( firstServeResult === "F") {
+        fault();
+        let secondServeResult = await promptString("F, A, IP?");
+        if (secondServeResult === "F") {
+            fault();
         } else if ( secondServeResult === "A") {
             ace();
+        } else {
+            inPlay();
         }
-    } else if ( firstServeResult === "M") {
-        miss();
     } else if ( firstServeResult === "A") {
         ace();
     } else {
@@ -187,6 +209,11 @@ while (isServing === intialServer && team1.score < gameTo) {
             } else { notReturned(); }
         }
 
+    }
+    let resetPromt = await promptString("Reset point Yes or no")
+    if(resetPromt === "yes"){resetInput = false; }
+    if(resetInput = true){
+        resetPoint();
     }
     if (pointWinner === team1) {
         team1.score += 1;
@@ -208,27 +235,31 @@ while (isServing === intialServer && team1.score < gameTo) {
         print ("Serving: " + isServing.denotation + " Returning:" + isReturning. denotation);
         teamServing = swapServingTeam(teamServingOrder);
     }
-
+    if(resetInput = true){
+        resetPoint();
+    }
 }
 while ((team1.score < gameTo && team2.score < gameTo) || ((team1.score - team2.score) < 2 && (
     (team1.score - team2.score) > 0) || ((team2.score - team1.score) < 2 && (
         (team2.score - team1.score) > 0)  ))) {
+    tempPlayer1 = player1;
+    tempPlayer2 = player2;
+    tempPlayer3 = player3;
+    tempPlayer4 = player4;
     serve = 1;
     numberOfShotsIP = 0;
     isServing.firstServeTotal += 1;
-    let firstServeResult = await promptString("P, M, A, IP?");
-    if ( firstServeResult === "P") {
-        pocket();
-        let secondServeResult = await promptString("P, M, A, IP?");
-        if (secondServeResult === "P") {
-            pocket();
-        } else if ( secondServeResult === "M") {
-            miss();
+    let firstServeResult = await promptString("F, A, IP?");
+    if ( firstServeResult === "F") {
+        fault();
+        let secondServeResult = await promptString("F, A, IP?");
+        if (secondServeResult === "F") {
+            fault();
         } else if ( secondServeResult === "A") {
             ace();
+        } else {
+            inPlay()
         }
-    } else if ( firstServeResult === "M") {
-        miss();
     } else if ( firstServeResult === "A") {
         ace();
     } else {
@@ -263,6 +294,11 @@ while ((team1.score < gameTo && team2.score < gameTo) || ((team1.score - team2.s
             } else { notReturned(); }
         }
 
+    }
+    let resetPromt = await promptString("Reset point Yes or no")
+    if(resetPromt === "yes"){resetInput = false; }
+    if(resetInput = true){
+        resetPoint();
     }
     if (pointWinner === team1 && teamServing === team1) {
         team1.score += 1;
@@ -303,7 +339,7 @@ while ((team1.score < gameTo && team2.score < gameTo) || ((team1.score - team2.s
             print ("Serving: " + isServing.denotation + " Returning:" + isReturning. denotation);
             teamServing = swapServingTeam(teamServingOrder);
         }
-    }   
+    }  
     if (numberOfShotsIP > 2) {
         numberOfRallies += 1;
     }
@@ -373,20 +409,15 @@ export let swapServer = (sO: Player[]): Player => {
     return sO[0];
 };
 // Called on pocket serve
-export let pocket = ():void => {
+export let fault = ():void => {
     if (serve === 1) {
     isServing.secondServeTotal += 1;
-    isServing.numberofPockets += 1;
+    isServing.numberOfFaults += 1;
     serve += 1;
     } else {
-        miss();
+        pointWinner = teamServingOrder[1];
     }
-    print(isServing.denotation + " pocket");
-};
-
-// Called on missed serve
-export let miss = ():void => {
-    pointWinner = teamServingOrder[1];
+    print(isServing.denotation + " fault");
 };
 
 // Called on Ace
@@ -512,3 +543,10 @@ export let getNumberOfAces = (data: Player[]): number => {
     }
     return result;
 };
+
+export let resetPoint = ():void => {
+    player1 = tempPlayer1;
+    player2 = tempPlayer2;
+    player3 = tempPlayer3;
+    player4 = tempPlayer4;
+}
