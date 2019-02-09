@@ -26,9 +26,6 @@ class Player {
     hittingPercentage: number = 0;
     killPercentage: number = 0;
 
-    constructor (name: string) {
-        this.denotation = name;
-    }
 
     ace() {
         this.numberofAces += 1;
@@ -58,9 +55,6 @@ class Team {
     player1: Player;
     player2: Player;
 
-    constructor (n:string) {
-        this.name = n;
-    }
 }
 
 class Point {
@@ -96,17 +90,28 @@ let attackingPlayer: Player;
 let ballInPlay: boolean;
 let numberOfShotsIP: number = 0;
 let numberOfRallies: number = 0;
+let tempPlayer1: Player;
+let tempPlayer2: Player;
+let tempPlayer3: Player;
+let tempPlayer4: Player;
+let resetInput = false;
+let team1 = new Team();
+let team2 = new Team();
+let player1 = new Player();
+let player2 = new Player();
+let player3 = new Player();
+let player4 = new Player();
 
 export let main = async () => {   
-let team1 = new Team(await promptString("Team 1 name?"));
-let player1 = new Player(await promptString("Player 1 name?"));
-let player2 = new Player(await promptString("Player 2 name?"));
+team1.name = await promptString("Team 1 name?");
+player1.denotation = await promptString("Player 1 name?");
+player2.denotation = await promptString("Player 2 name?");
 team1.player1 = player1;
 team1.player2 = player2;
 
-let team2 = new Team(await promptString("Team 2 name?"));
-let player3 = new Player(await promptString("Player 3 name?"));
-let player4 = new Player(await promptString("Player 4 name?"));
+team2.name = await promptString("Team 2 name?");
+player3.denotation = await promptString("Player 3 name?");
+player4.denotation = await promptString("Player 4 name?");
 team2.player1 = player3;
 team2.player2 = player4;
 
@@ -153,6 +158,10 @@ teamServingOrder = [team1, team2];
 teamServing = team1;
 
 while (isServing === intialServer && team1.score < gameTo) {
+    tempPlayer1 = player1;
+    tempPlayer2 = player2;
+    tempPlayer3 = player3;
+    tempPlayer4 = player4;
     serve = 1;
     isServing.firstServeTotal += 1;
     let firstServeResult = await promptString("F, A, IP?");
@@ -201,6 +210,11 @@ while (isServing === intialServer && team1.score < gameTo) {
         }
 
     }
+    let resetPromt = await promptString("Reset point Yes or no")
+    if(resetPromt === "yes"){resetInput = false; }
+    if(resetInput = true){
+        resetPoint();
+    }
     if (pointWinner === team1) {
         team1.score += 1;
         isReturning = swapReturnerBreak(returningOrder);
@@ -221,11 +235,17 @@ while (isServing === intialServer && team1.score < gameTo) {
         print ("Serving: " + isServing.denotation + " Returning:" + isReturning. denotation);
         teamServing = swapServingTeam(teamServingOrder);
     }
-
+    if(resetInput = true){
+        resetPoint();
+    }
 }
 while ((team1.score < gameTo && team2.score < gameTo) || ((team1.score - team2.score) < 2 && (
     (team1.score - team2.score) > 0) || ((team2.score - team1.score) < 2 && (
         (team2.score - team1.score) > 0)  ))) {
+    tempPlayer1 = player1;
+    tempPlayer2 = player2;
+    tempPlayer3 = player3;
+    tempPlayer4 = player4;
     serve = 1;
     numberOfShotsIP = 0;
     isServing.firstServeTotal += 1;
@@ -275,6 +295,11 @@ while ((team1.score < gameTo && team2.score < gameTo) || ((team1.score - team2.s
         }
 
     }
+    let resetPromt = await promptString("Reset point Yes or no")
+    if(resetPromt === "yes"){resetInput = false; }
+    if(resetInput = true){
+        resetPoint();
+    }
     if (pointWinner === team1 && teamServing === team1) {
         team1.score += 1;
         isReturning = swapReturnerBreak(returningOrder);
@@ -314,7 +339,7 @@ while ((team1.score < gameTo && team2.score < gameTo) || ((team1.score - team2.s
             print ("Serving: " + isServing.denotation + " Returning:" + isReturning. denotation);
             teamServing = swapServingTeam(teamServingOrder);
         }
-    }   
+    }  
     if (numberOfShotsIP > 2) {
         numberOfRallies += 1;
     }
@@ -518,3 +543,10 @@ export let getNumberOfAces = (data: Player[]): number => {
     }
     return result;
 };
+
+export let resetPoint = ():void => {
+    player1 = tempPlayer1;
+    player2 = tempPlayer2;
+    player3 = tempPlayer3;
+    player4 = tempPlayer4;
+}
