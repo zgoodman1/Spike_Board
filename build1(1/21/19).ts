@@ -113,22 +113,37 @@ team2.player2 = player4;
 let gameTo = await promptNumber("Game to?");
 
 let whoIsServing = await promptNumber("Who is serving? Player 1 or 2");
-if (whoIsServing === 1) {
-
-    servingOrder = [player1, player3, player2, player4];
-    let whoIsReturning = await promptNumber("who is returning? player 3 or 4");
-    if (whoIsReturning === 3) {
-    returningOrder = [player3, player1, player4, player2];
-}   else {
-    returningOrder =  [player4, player1, player3, player2];
+if (whoIsServing == player1){
+    servingOrder = [player1, player3, player2, player4]
+    let returning = promptString("Who is returning? ")
+    if (returning == player3){
+        returningOrder = [player3, player1, player4, player2]
+    } else{
+        returningOrder = [player4, player2, player3, player1]
     }
-} else {
-    servingOrder = [player2, player3, player1, player4];
-    let whoIsReturning = await promptNumber("who is returning? player 3 or 4");
-    if (whoIsReturning === 3) {
-    returningOrder = [player3, player2, player4, player1];
-}   else {
-    returningOrder =  [player4, player2, player3, player1];
+} else if (whoIsServing == player2) {
+    servingOrder = [player2, player3, player1, player4]
+    let returning = promptString("Who is returning? ")
+    if (returning == player3){
+        returningOrder = [player3, player1, player4, player2]
+    } else{
+        returningOrder = [player4, player2, player3, player1]
+    }
+} else if( whoIsServing == player3) {
+    servingOrder = [player3, player1, player4, player2]
+    let returning = promptString("Who is returning? ")
+    if (returning == player1) {
+        returningOrder = [player1, player3, player2, player4]
+    } else{
+        returningOrder = [player2, player4, player1, player3]
+    }
+} else{
+    servingOrder = [player4, player1, player3, player2]
+    let returning = promptString("Who is returning? ")
+    if (returning == player2){
+        returningOrder = [player2, player3, player1, player4]
+    } else{
+        returningOrder = [player1, player4, player2, player3]
     }
 }
 isReturning = returningOrder[0];
