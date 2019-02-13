@@ -99,27 +99,115 @@ var player1 = new Player();
 var player2 = new Player();
 var player3 = new Player();
 var player4 = new Player();
+//------------------------
 var gameTo = 0;
+var initialServer = new Player();
 //document.getElementById("team1Names").style.display="block";
-//OnClick Functions
+//OnClick Functions:
+//Continue Button functionality (first 3 pages)
 exports.continueButton = function (currID) {
     if (currID == "team1Names") {
         team1.name = document.getElementById("t1name").value;
         player1.name = document.getElementById("p1name").value;
+        document.getElementById("p1button").innerHTML = player1.name;
         player2.name = document.getElementById("p2name").value;
+        document.getElementById("p2button").innerHTML = player2.name;
+        team1.player1 = player1;
+        team1.player2 = player2;
         console.log(team1.name + player1.name + player2.name);
         document.getElementById("team2Names").style.display = "block";
     }
     else if (currID == "team2Names") {
         team2.name = document.getElementById("t2name").value;
         player3.name = document.getElementById("p3name").value;
+        document.getElementById("p3button").innerHTML = player3.name;
         player4.name = document.getElementById("p4name").value;
+        document.getElementById("p4button").innerHTML = player4.name;
         console.log(team2.name + player3.name + player4.name);
+        team2.player1 = player3;
+        team2.player2 = player4;
         document.getElementById("gameTo").style.display = "block";
     }
     else if (currID == "gameTo") {
         gameTo = +document.getElementById("gameToInput").value;
         document.getElementById("firstServer").style.display = "block";
+    }
+    document.getElementById(currID).style.display = "none";
+};
+//Player Click functionality (for screens 4 and 5 (first server))
+exports.playerClick = function (currID, player) {
+    if (currID == "firstServer") {
+        document.getElementById("firstReturner").style.display = "block"; //ugly way to do this, but needs to be displayed to be edited
+        if (player == "player1") {
+            servingOrder = [player1, player3, player2, player4];
+            document.getElementById("p1return").innerHTML = player1.name;
+            document.getElementById("p2return").innerHTML = player2.name;
+            document.getElementById("team2return").style.display = "none";
+            teamServingOrder = [team1, team2];
+            teamServing = team1;
+        }
+        else if (player == "player2") {
+            servingOrder = [player2, player3, player1, player4];
+            document.getElementById("p1return").innerHTML = player1.name;
+            document.getElementById("p2return").innerHTML = player2.name;
+            document.getElementById("team2return").style.display = "none";
+            teamServingOrder = [team1, team2];
+            teamServing = team1;
+        }
+        else if (player == "player3") {
+            servingOrder = [player3, player1, player4, player2];
+            document.getElementById("p3return").innerHTML = player3.name;
+            document.getElementById("p4return").innerHTML = player4.name;
+            document.getElementById("team1return").style.display = "none";
+            teamServingOrder = [team2, team1];
+            teamServing = team2;
+        }
+        else if (player == "player4") {
+            servingOrder = [player4, player1, player3, player2];
+            document.getElementById("p3return").innerHTML = player3.name;
+            document.getElementById("p4return").innerHTML = player4.name;
+            document.getElementById("team1return").style.display = "none";
+            teamServingOrder = [team2, team1];
+            teamServing = team2;
+        }
+        isServing = servingOrder[0];
+        initialServer = isServing;
+    }
+    else if (currID == "firstReturner") {
+        if (player == "player1") {
+            if (initialServer == player3) {
+                returningOrder = [player1, player3, player2, player4];
+            }
+            else {
+                returningOrder = [player1, player4, player2, player3];
+            }
+        }
+        else if (player == "player2") {
+            if (initialServer == player3) {
+                returningOrder = [player2, player4, player1, player3];
+            }
+            else {
+                returningOrder = [player2, player3, player1, player4];
+            }
+        }
+        else if (player == "player3") {
+            if (initialServer == player1) {
+                returningOrder = [player3, player1, player4, player2];
+            }
+            else {
+                returningOrder = [player3, player1, player4, player2];
+            }
+        }
+        else if (player == "player4") {
+            if (initialServer == player1) {
+                returningOrder = [player4, player2, player3, player1];
+            }
+            else {
+                returningOrder = [player4, player2, player3, player1];
+            }
+        }
+        isReturning = returningOrder[0];
+        document.getElementById("point1serve1").style.display = "none";
     }
     document.getElementById(currID).style.display = "none";
 };

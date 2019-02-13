@@ -25,16 +25,20 @@
       <button onclick = "exports.continueButton('gameTo')"> Continue </button>
     </div>
     <div id ="firstServer">
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
+      <button id = "p1button" onclick = "exports.playerClick('firstServer','player1')"></button>
+      <button id = "p2button" onclick = "exports.playerClick('firstServer','player2')"></button>
+      <button id = "p3button" onclick = "exports.playerClick('firstServer','player3')"></button>
+      <button id = "p4button" onclick = "exports.playerClick('firstServer','player4')"></button>
     </div>
     <div id = "firstReturner">
-      <button></button>
-      <button></button>
-      <button></button>
-      <button></button>
+      <div id = "team1return">
+        <button id = "p1return" onclick = "exports.playerClick('firstReturner','player1')"></button>
+        <button id = "p2return" onclick = "exports.playerClick('firstReturner','player2')"></button>
+      </div>
+      <div id = "team2return">
+        <button id = "p3return" onclick = "exports.playerClick('firstReturner','player3')"></button>
+        <button id = "p4return" onclick = "exports.playerClick('firstReturner','player4')"></button>
+      </div>
     </div>
     <div id="point1serve1">
       <button></button>
