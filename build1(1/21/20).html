@@ -74,8 +74,8 @@
     </div>
     <div id="point1hitResult">
       <h2>Result of the hit</h2>
-      <button onclick = "exports.p1HitInput('dTouch1')">Defensive touch by 1*</button>
-      <button onclick = "exports.p1HitInput('dTouch2')">Defensive touch by 2*</button>
+      <button id = "p1dt1button" onclick = "exports.p1HitInput('dTouch1')"></button>
+      <button id = "p1dt2button" onclick = "exports.p1HitInput('dTouch2')"></button>
       <button onclick = "exports.p1HitInput('kill')">Kill shot</button>
       <button onclick = "exports.p1HitInput('miss')">Miss</button>
     </div>
@@ -112,8 +112,8 @@
     </div>
     <div id="genHitResult">
       <h2>Result of the play</h2>
-      <button onclick = "exports.genHitResult('dTouch1')">Defensive Touch By 1**</button>
-      <button onclick = "exports.genHitResult('dTouch2')">Defensive Touch By 2**</button>
+      <button id = "dt1button" onclick = "exports.genHitResult('dTouch1')"></button>
+      <button id = "dt2button" onclick = "exports.genHitResult('dTouch2')"></button>
       <button onclick = "exports.genHitResult('kill')">Kill Shot</button>
       <button onclick = "exports.genHitResult('miss')">Miss</button>
     </div>
@@ -124,6 +124,7 @@
     </div>
     <div id = "gameOver">
       <h2>Game Over</h2>
+
     </div>
     <br></br>
     <button>Manual End Game (testing)</button>

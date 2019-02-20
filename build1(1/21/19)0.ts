@@ -361,8 +361,11 @@ export let p1InPlayInput = (input: string): void =>{
   }
   else if(input == "noHit"){
     notReturned();
+
     document.getElementById("point1continue").style.display = "block";
   }
+  document.getElementById("p1dt1button").innerHTML = "Defensive touch by " + teamDefending.player1.name;
+  document.getElementById("p1dt2button").innerHTML = "Defensive touch by " + teamDefending.player2.name;
   document.getElementById("point1inPlay").style.display = "none";
 }
 
@@ -383,6 +386,7 @@ export let p1HitInput = (input: string): void =>{
     player2DT();
     document.getElementById("point1inPlay").style.display = "block";
   }
+
   document.getElementById("point1hitResult").style.display = "none";
 
 }
@@ -571,6 +575,8 @@ export let genInPlayResult = (input: string):void => {
     notReturned();
     document.getElementById("genContinue").style.display = "block";
   }
+  document.getElementById("dt1button").innerHTML = "Defensive touch by " + teamDefending.player1.name;
+  document.getElementById("dt2button").innerHTML = "Defensive touch by " + teamDefending.player2.name;
   document.getElementById("genInPlay").style.display = "none";
 }
 

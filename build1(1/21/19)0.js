@@ -355,6 +355,8 @@ exports.p1InPlayInput = function (input) {
         exports.notReturned();
         document.getElementById("point1continue").style.display = "block";
     }
+    document.getElementById("p1dt1button").innerHTML = "Defensive touch by " + teamDefending.player1.name;
+    document.getElementById("p1dt2button").innerHTML = "Defensive touch by " + teamDefending.player2.name;
     document.getElementById("point1inPlay").style.display = "none";
 };
 exports.p1HitInput = function (input) {
@@ -557,6 +559,8 @@ exports.genInPlayResult = function (input) {
         exports.notReturned();
         document.getElementById("genContinue").style.display = "block";
     }
+    document.getElementById("dt1button").innerHTML = "Defensive touch by " + teamDefending.player1.name;
+    document.getElementById("dt2button").innerHTML = "Defensive touch by " + teamDefending.player2.name;
     document.getElementById("genInPlay").style.display = "none";
 };
 exports.genHitResult = function (input) {
