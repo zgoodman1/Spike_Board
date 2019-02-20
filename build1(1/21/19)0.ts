@@ -81,7 +81,7 @@ let teamServing: Team;
 let pointWinner: Team;
 let serve: number = 1;
 let teamAttacking: Team;
-let teamDefeding: Team;
+let teamDefending: Team;
 let defendingPlayer: Player;
 let attackingPlayer: Player;
 let ballInPlay: boolean;
@@ -102,6 +102,99 @@ let player4 = new Player();
 let gameTo = 0;
 let initialServer = new Player();
 //document.getElementById("team1Names").style.display="block";
+
+/*tempPlayer1 = player1;
+tempPlayer2 = player2;
+tempPlayer3 = player3;
+tempPlayer4 = player4;
+serve = 1;
+isServing.firstServeTotal += 1;
+let firstServeResult = await promptString("F, A, IP?");
+if ( firstServeResult === "F") {
+    fault();
+    let secondServeResult = await promptString("F, A, IP?");
+    if (secondServeResult === "F") {
+        fault();
+    } else if ( secondServeResult === "A") {
+        ace();
+    } else {
+        inPlay();
+    }
+} else if ( firstServeResult === "A") {
+    ace();
+} else {
+    inPlay();
+    while (ballInPlay === true) {
+        let returnResult = await promptString("D1, D2, D3, NH?");
+        if (returnResult === "D1") {
+            downOn1();
+            let hitResult = await promptString("K, M, DT?");
+            if (hitResult === "K") {kill(); } else
+            if (hitResult === "M") {missedHit(); } else
+            if (hitResult === "DT1" || "1" || teamDefending.player1.denotation) {  player1DT();
+                } else {player2DT(); }
+        } else if (returnResult === "D2") {
+            downOn2();
+            let hitResult = await promptString("K, M, DT?");
+            if (hitResult === "K") {kill(); } else
+            if (hitResult === "M") {missedHit(); } else {
+            if (hitResult === "DT1" || "1" || teamDefending.player1.denotation) {  player1DT();
+                } else {player2DT(); }
+                    }
+        } else if (returnResult === "D3") {
+            downOn3();
+            let hitResult = await promptString("K, M, DT1 0r DT2 ?");
+            if (hitResult === "K") {kill(); } else
+            if (hitResult === "M") {missedHit(); } else {
+            if (hitResult === "DT1" || "1" || teamDefending.player1.denotation) {  player1DT();
+            } else {
+                player2DT();
+            }
+            }
+        } else { notReturned(); }
+    }
+
+}
+let resetPromt = await promptString("Reset point Yes or no")
+if(resetPromt === "yes"){resetInput = false; }
+if(resetInput = true){
+    resetPoint();
+}
+if (pointWinner === teamServing) {
+    teamServing.score += 1;
+    isReturning = swapReturnerBreak(returningOrder);
+    //score and serving/returning print
+} else if(teamServing == team1) {
+    team2.score += 1;
+    whoIsServing = await promptNumber("Who is serving player 3 or 4?");
+
+    if (whoIsServing == player3.name) {
+        isServing = swapServer(servingOrder);
+    } else {
+        establishServingOrder(servingOrder);
+        isServing = swapServer(servingOrder);
+    }
+    isReturning = swapReturner(returningOrder);
+    //score and serving/returning print
+    teamServing = swapServingTeam(teamServingOrder);
+}else if(teamServing == team2){
+  team2.score += 1;
+  whoIsServing = await promptNumber("Who is serving player 3 or 4?");
+
+  if (whoIsServing === 3) {
+      isServing = swapServer(servingOrder);
+  } else {
+      establishServingOrder(servingOrder);
+      isServing = swapServer(servingOrder);
+  }
+  isReturning = swapReturner(returningOrder);
+  //score and serving/returning print
+  teamServing = swapServingTeam(teamServingOrder);
+}
+if(resetInput = true){
+    resetPoint();
+}*/
+
 
 //OnClick Functions:
 //Continue Button functionality (first 3 pages)
@@ -142,33 +235,33 @@ export let playerClick = (currID: string, player: string): void =>{
     document.getElementById("firstReturner").style.display="block"; //ugly way to do this, but needs to be displayed to be edited
     if(player == "player1"){
       servingOrder = [player1, player3, player2, player4]
-      document.getElementById("p1return").innerHTML = player1.name;
-      document.getElementById("p2return").innerHTML = player2.name;
-      document.getElementById("team2return").style.display = "none";
+      document.getElementById("p3return").innerHTML = player3.name;
+      document.getElementById("p4return").innerHTML = player4.name;
+      document.getElementById("team1return").style.display = "none";
       teamServingOrder = [team1, team2];
       teamServing = team1;
     }
     else if(player == "player2"){
       servingOrder = [player2, player3, player1, player4]
-      document.getElementById("p1return").innerHTML = player1.name;
-      document.getElementById("p2return").innerHTML = player2.name;
-      document.getElementById("team2return").style.display = "none";
+      document.getElementById("p3return").innerHTML = player3.name;
+      document.getElementById("p4return").innerHTML = player4.name;
+      document.getElementById("team1return").style.display = "none";
       teamServingOrder = [team1, team2];
       teamServing = team1;
     }
     else if(player == "player3"){
       servingOrder = [player3, player1, player4, player2]
-      document.getElementById("p3return").innerHTML = player3.name;
-      document.getElementById("p4return").innerHTML = player4.name;
-      document.getElementById("team1return").style.display = "none";
+      document.getElementById("p1return").innerHTML = player1.name;
+      document.getElementById("p2return").innerHTML = player2.name;
+      document.getElementById("team2return").style.display = "none";
       teamServingOrder = [team2, team1];
       teamServing = team2;
     }
     else if(player == "player4"){
       servingOrder = [player4, player1, player3, player2]
-      document.getElementById("p3return").innerHTML = player3.name;
-      document.getElementById("p4return").innerHTML = player4.name;
-      document.getElementById("team1return").style.display = "none";
+      document.getElementById("p1return").innerHTML = player1.name;
+      document.getElementById("p2return").innerHTML = player2.name;
+      document.getElementById("team2return").style.display = "none";
       teamServingOrder = [team2, team1];
       teamServing = team2;
     }
@@ -179,15 +272,15 @@ export let playerClick = (currID: string, player: string): void =>{
   else if(currID == "firstReturner"){
       if(player == "player1"){
         if(initialServer == player3){
-          returningOrder = [player1, player3, player2, player4]
+          returningOrder = [player1, player3, player2, player4];
         }
         else{
-          returningOrder = [player1, player4, player2, player3]
+          returningOrder = [player1, player4, player2, player3];
         }
       }
       else if(player == "player2"){
         if(initialServer == player3){
-          returningOrder = [player2, player4, player1, player3]
+          returningOrder = [player2, player4, player1, player3];
         }
         else{
           returningOrder = [player2, player3, player1, player4]
@@ -195,26 +288,313 @@ export let playerClick = (currID: string, player: string): void =>{
       }
       else if(player == "player3"){
         if(initialServer == player1){
-          returningOrder = [player3, player1, player4, player2]
+          returningOrder = [player3, player1, player4, player2];
         }
         else{
-          returningOrder = [player3, player1, player4, player2]
+          returningOrder = [player3, player1, player4, player2];
         }
       }
       else if(player == "player4"){
         if(initialServer == player1){
-          returningOrder = [player4, player2, player3, player1]
+          returningOrder = [player4, player2, player3, player1];
         }
         else{
-          returningOrder = [player4, player2, player3, player1]
+          returningOrder = [player4, player2, player3, player1];
         }
       }
       isReturning = returningOrder[0];
-      document.getElementById("point1serve1").style.display="none";
+      document.getElementById("point1serve1").style.display="block";
+      tempPlayer1 = player1;
+      tempPlayer2 = player2;
+      tempPlayer3 = player3;
+      tempPlayer4 = player4;
+      serve = 1;
+      isServing.firstServeTotal += 1;
   }
   document.getElementById(currID).style.display="none";
 
 }
+export let p1Serve1Input = (input: string): void =>{
+  if(input == "fault"){
+    document.getElementById("point1serve2").style.display = "block";
+    fault();
+  }
+  else if(input == "ace"){
+    document.getElementById("point1continue").style.display = "block";
+    ace();
+  }
+  else if(input == "inPlay"){
+    document.getElementById("point1inPlay").style.display = "block";
+    inPlay();
+  }
+  document.getElementById("point1serve1").style.display = "none";
+}
+
+export let p1Serve2Input = (input: string): void =>{
+  if(input == "fault"){
+    document.getElementById("point1continue").style.display = "block";
+    fault();
+  }
+  else if(input == "ace"){
+    document.getElementById("point1continue").style.display = "block";
+    ace();
+  }
+  else if(input == "inPlay"){
+    document.getElementById("point1inPlay").style.display = "block";
+    inPlay();
+  }
+  document.getElementById("point1serve2").style.display="none";
+}
+
+export let p1InPlayInput = (input: string): void =>{
+  if(input == "onOne"){
+    downOn1();
+    document.getElementById("point1hitResult").style.display = "block";
+  }
+  else if(input == "onTwo"){
+    downOn2();
+    document.getElementById("point1hitResult").style.display = "block";
+  }
+  else if(input == "onThree"){
+    downOn3();
+    document.getElementById("point1hitResult").style.display = "block";
+  }
+  else if(input == "noHit"){
+    notReturned();
+    document.getElementById("point1continue").style.display = "block";
+  }
+  document.getElementById("point1inPlay").style.display = "none";
+}
+
+export let p1HitInput = (input: string): void =>{
+  if(input == "kill"){
+    kill();
+    document.getElementById("point1continue").style.display = "block";
+  }
+  else if(input == "miss"){
+    missedHit();
+    document.getElementById("point1continue").style.display = "block";
+  }
+  else if(input == "dTouch1"){
+    player1DT();
+    document.getElementById("point1inPlay").style.display = "block";
+  }
+  else if(input == "dTouch2"){
+    player2DT();
+    document.getElementById("point1inPlay").style.display = "block";
+  }
+  document.getElementById("point1hitResult").style.display = "none";
+
+}
+
+export let nextPoint = (pointOne: boolean):void =>{
+  if(pointOne){
+    if (pointWinner === teamServing) {
+      teamServing.score += 1;
+      isReturning = swapReturnerBreak(returningOrder);
+      console.log(team1.name + ": " + team1.score + " " + team2.name + ": " + team2.score);
+      console.log("Serving: " + isServing.name + "Returning: " + isReturning.name);
+      document.getElementById("point1serve1").style.display = "block";
+    }
+    else if (teamServing == team1){
+      team2.score += 1;
+      console.log(team1.name + ": " + team1.score + " " + team2.name + ": " + team2.score);
+      document.getElementById("secondServer").style.display = "block";
+      document.getElementById("p1serve").style.display = "none";
+      document.getElementById("p2serve").style.display = "none";
+      document.getElementById("p3serve").innerHTML = player3.name;
+      document.getElementById("p4serve").innerHTML = player4.name;
+    }
+    else if (teamServing == team2){
+      team1.score +=1;
+      console.log(team1.name + ": " + team1.score + " " + team2.name + ": " + team2.score);
+      document.getElementById("secondServer").style.display = "block";
+      document.getElementById("p3serve").style.display = "none";
+      document.getElementById("p4serve").style.display = "none";
+      document.getElementById("p1serve").innerHTML = player1.name;
+      document.getElementById("p2serve").innerHTML = player2.name;
+    }
+    document.getElementById("point1continue").style.display = "none";
+    if((team1.score >= gameTo || team2.score >= gameTo) && Math.abs(team1.score - team2.score) >= 2){
+      document.getElementById("secondServer").style.display = "none";
+      document.getElementById("point1serve1").style.display = "none";
+      document.getElementById("gameOver").style.display = "block";
+      for (let i = 0; i < 4; i++) {
+          servingOrder[i].calc();
+          console.log(servingOrder[i]);
+      }
+      console.log("Number of Rallies " + numberOfRallies);
+      console.log("Number of Aces " + getNumberOfAces(servingOrder));
+    }
+  }
+  else{
+    if(pointWinner == teamServing){
+      teamServing.score += 1;
+      isReturning = swapReturnerBreak(returningOrder);
+      console.log(team1.name + ": " + team1.score + " " + team2.name + ": " + team2.score);
+      console.log("Serving: " + isServing.name + "Returning: " + isReturning.name);
+    }
+
+    else if(teamServing == team1){
+      team2.score += 1;
+      isServing = swapServer(servingOrder);
+      if (isServing === isReturning) {
+        isReturning = swapReturner(returningOrder);
+        console.log(team1.name + " " + team1.score + " " + team2.name + " " + team2.score);
+        console.log("Serving: " + isServing.name + " Returning:" + isReturning.name);
+        teamServing = swapServingTeam(teamServingOrder);
+      }
+      else {
+        isReturning = swapReturner(returningOrder);
+        console.log(team1.name + " " + team1.score + " " + team2.name + " " + team2.score);
+        console.log("Serving: " + isServing.name + " Returning:" + isReturning.name);
+        teamServing = swapServingTeam(teamServingOrder);
+      }
+    }
+    else if (teamServing == team2){
+      team1.score += 1;
+      isServing = swapServer(servingOrder);
+      if (isServing === isReturning) {
+        isReturning = swapReturner(returningOrder);
+        console.log(team1.name + " " + team1.score + " " + team2.name + " " + team2.score);
+        console.log("Serving: " + isServing.name + " Returning:" + isReturning.name);
+        teamServing = swapServingTeam(teamServingOrder);
+      } else {
+        isReturning = swapReturner(returningOrder);
+        console.log(team1.name + " " + team1.score + " " + team2.name + " " + team2.score);
+        console.log("Serving: " + isServing.name + " Returning:" + isReturning.name);
+        teamServing = swapServingTeam(teamServingOrder);
+      }
+    }
+    document.getElementById("genServe1").style.display = "block";
+    document.getElementById("genContinue").style.display = "none";
+  }
+  tempPlayer1 = player1;
+  tempPlayer2 = player2;
+  tempPlayer3 = player3;
+  tempPlayer4 = player4;
+  serve = 1;
+  isServing.firstServeTotal += 1;
+  if (numberOfShotsIP > 2) {
+      numberOfRallies += 1;
+  }
+  if((team1.score >= gameTo || team2.score >= gameTo) && Math.abs(team1.score - team2.score) >= 2){
+    isServing.firstServeTotal -= 1;
+    document.getElementById("genServe1").style.display = "none";
+    document.getElementById("gameOver").style.display = "block";
+    for (let i = 0; i < 4; i++) {
+        servingOrder[i].calc();
+        console.log(servingOrder[i]);
+    }
+    console.log("Number of Rallies " + numberOfRallies);
+    console.log("Number of Aces " + getNumberOfAces(servingOrder));
+  }
+}
+
+export let secondServeSet = (player: string): void =>{
+  if (player == player4.name) {
+      establishServingOrder(servingOrder);
+      establishReturningOrder(returningOrder);
+  }
+  else if (player == player2.name){
+      establishServingOrder(servingOrder);
+      establishReturningOrder(returningOrder);
+  }
+  isServing = swapServer(servingOrder);
+  isReturning = swapReturner(returningOrder);
+  teamServing = swapServingTeam(teamServingOrder);
+  console.log("Serving: " + isServing.name + "Returning: " + isReturning.name);
+  tempPlayer1 = player1;
+  tempPlayer2 = player2;
+  tempPlayer3 = player3;
+  tempPlayer4 = player4;
+  serve = 1;
+  isServing.firstServeTotal += 1;
+  document.getElementById("genServe1").style.display = "block";
+  document.getElementById("secondServer").style.display = "none";
+}
+
+export let genServeResult = (serveNum: number, input: string): void =>{
+  /*tempPlayer1 = player1;
+  tempPlayer2 = player2;
+  tempPlayer3 = player3;
+  tempPlayer4 = player4;
+  serve = 1;
+  numberOfShotsIP = 0;
+  isServing.firstServeTotal += 1;*/
+  if(serveNum == 1){
+    if(input == "fault"){
+      document.getElementById("genServe2").style.display = "block";
+      fault();
+    }
+    else if(input == "ace"){
+      document.getElementById("genContinue").style.display = "block";
+      ace();
+    }
+    else if(input == "inPlay"){
+      document.getElementById("genInPlay").style.display = "block";
+      inPlay();
+    }
+    document.getElementById("genServe1").style.display = "none";
+  }
+  else{
+    if(input == "fault"){
+      document.getElementById("genContinue").style.display = "block";
+      fault();
+    }
+    else if(input == "ace"){
+      document.getElementById("genContinue").style.display = "block";
+      ace();
+    }
+    else if(input == "inPlay"){
+      document.getElementById("genInPlay").style.display = "block";
+      inPlay();
+    }
+    document.getElementById("genServe2").style.display = "none";
+  }
+}
+
+export let genInPlayResult = (input: string):void => {
+  if (input == "onOne"){
+    downOn1();
+    document.getElementById("genHitResult").style.display = "block";
+  }
+  else if(input == "onTwo"){
+    downOn2();
+    document.getElementById("genHitResult").style.display = "block";
+  }
+  else if(input == "onThree"){
+    downOn3();
+    document.getElementById("genHitResult").style.display = "block";
+  }
+  else if(input == "noHit"){
+    notReturned();
+    document.getElementById("genContinue").style.display = "block";
+  }
+  document.getElementById("genInPlay").style.display = "none";
+}
+
+export let genHitResult = (input: string): void =>{
+  if(input == "kill"){
+    kill();
+    document.getElementById("genContinue").style.display = "block";
+  }
+  else if(input == "miss"){
+    missedHit();
+    document.getElementById("genContinue").style.display = "block";
+  }
+  else if(input == "dTouch1"){
+    player1DT();
+    document.getElementById("genInPlay").style.display = "block";
+  }
+  else if(input == "dTouch2"){
+    player2DT();
+    document.getElementById("genInPlay").style.display = "block";
+  }
+  document.getElementById("genHitResult").style.display = "none";
+}
+
+
 
 export let establishServingOrder = (sO: Player[]): void => {
     let temp = sO[1];
@@ -299,7 +679,7 @@ export let inPlay = (): void => {
         isServing.secondServeMade += 1;
     }
     teamAttacking = teamServingOrder[1];
-    teamDefeding = teamServing;
+    teamDefending = teamServing;
     defendingPlayer = isReturning;
     ballInPlay = true;
 };
@@ -330,11 +710,11 @@ export let kill = (): void => {
 };
 
 export let missedHit = (): void => {
-    if (teamDefeding === teamServing) {
+    if (teamDefending === teamServing) {
         isServing.numberOfBreaksOnServe += 1;
         isReturning.numberOfBreaksWhenReturning += 1;
     }
-    pointWinner = teamDefeding;
+    pointWinner = teamDefending;
     ballInPlay = false;
 };
 export let player1DT = ():void => {
@@ -342,8 +722,8 @@ export let player1DT = ():void => {
     numberOfShotsIP += 1;
     let temp: Team;
     temp = teamAttacking;
-    teamAttacking = teamDefeding;
-    teamDefeding = temp;
+    teamAttacking = teamDefending;
+    teamDefending = temp;
     defendingPlayer = teamAttacking.player1;
     defendingPlayer.numberOfDefensiveTouches += 1;
     if (serve === 1 && teamAttacking === teamServing && numberOfShotsIP === 1) {
@@ -358,8 +738,8 @@ export let player2DT = ():void => {
     numberOfShotsIP += 1;
     let temp: Team;
     temp = teamAttacking;
-    teamAttacking = teamDefeding;
-    teamDefeding = temp;
+    teamAttacking = teamDefending;
+    teamDefending = temp;
     defendingPlayer = teamAttacking.player2;
     defendingPlayer.numberOfDefensiveTouches += 1;
     if (serve === 1 && teamAttacking === teamServing && numberOfShotsIP === 1) {
@@ -370,10 +750,10 @@ export let player2DT = ():void => {
 };
 
 export let swapAttacker = (rp: Player): Player => {
-    if (defendingPlayer === teamDefeding.player1) {
-        return teamDefeding.player2;
-    } else if (defendingPlayer === teamDefeding.player2) {
-        return teamDefeding.player1;
+    if (defendingPlayer === teamDefending.player1) {
+        return teamDefending.player2;
+    } else if (defendingPlayer === teamDefending.player2) {
+        return teamDefending.player1;
     } else {
         return teamAttacking.player1;
     }
@@ -384,7 +764,7 @@ export let notReturned = ():void => {
         isServing.numberOfBreaksOnServe += 1;
         isReturning.numberOfBreaksWhenReturning += 1;
     }
-    pointWinner = teamDefeding;
+    pointWinner = teamDefending;
     ballInPlay = false;
 };
 
