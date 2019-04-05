@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TypeScript SpikeballApp</title>
+    <script> var exports = {}; </script>
+    <script src="19)0.js"></script>
+    <link rel="stylesheet" type="text/css" href="20).css"></link>
+  </head>
+  <body>
+    <h1>TypeScript SpikeballApp</h1>
+    <div id = "team1Names">
+      <h2>Team 1</h2>
+      <p>Team Name </p>
+      <input id = "t1name" value = "Team1"></input>
+      <br></br>
+      <p>Player Names </p>
+      <input id = "p1name" value = "Player1"></input>
+      <input id = "p2name" value = "Player2"></input>
+      <br></br>
+      <button onclick = "exports.continueButton('team1Names')"> Continue </button>
+    </div>
+    <div id = "team2Names">
+      <h2>Team 2</h2>
+      <p>Team Name </p>
+      <input id = "t2name" value = "Team2"></input>
+      <br></br>
+      <p>Player Names</p>
+      <input id = "p3name" value = "Player3"></input>
+      <input id = "p4name" value = "Player4"></input>
+      <br></br>
+      <button onclick = "exports.continueButton('team2Names')"> Continue </button>
+    </div>
+    <div id= "gameTo">
+      <h2>What score is the game to?</h2>
+      <input id=gameToInput></input>
+      <button onclick = "exports.continueButton('gameTo')"> Continue </button>
+    </div>
+    <div id ="firstServer">
+      <h2>Who served first?</h2>
+      <button id = "p1button" onclick = "exports.playerClick('firstServer','player1')"></button>
+      <button id = "p2button" onclick = "exports.playerClick('firstServer','player2')"></button>
+      <button id = "p3button" onclick = "exports.playerClick('firstServer','player3')"></button>
+      <button id = "p4button" onclick = "exports.playerClick('firstServer','player4')"></button>
+    </div>
+    <div id = "firstReturner">
+      <h2>Who returned first?</h2>
+      <div id = "team1return">
+        <button id = "p1return" onclick = "exports.playerClick('firstReturner','player1')"></button>
+        <button id = "p2return" onclick = "exports.playerClick('firstReturner','player2')"></button>
+      </div>
+      <div id = "team2return">
+        <button id = "p3return" onclick = "exports.playerClick('firstReturner','player3')"></button>
+        <button id = "p4return" onclick = "exports.playerClick('firstReturner','player4')"></button>
+      </div>
+    </div>
+    <div id="point1serve1">
+      <h2>First Serve</h2>
+      <button onclick = "exports.p1Serve1Input('fault')">Fault</button>
+      <button onclick = "exports.p1Serve1Input('ace')">Ace</button>
+      <button onclick = "exports.p1Serve1Input('inPlay')">In Play</button>
+    </div>
+    <div id="point1serve2">
+      <h2>Second Serve</h2>
+      <button onclick = "exports.p1Serve2Input('fault')">Fault</button>
+      <button onclick = "exports.p1Serve2Input('ace')">Ace</button>
+      <button onclick = "exports.p1Serve2Input('inPlay')">In Play</button>
+    </div>
+    <div id="point1inPlay">
+      <h2>Ball in play</h2>
+      <button onclick = "exports.p1InPlayInput('onOne')">Hit on one</button>
+      <button onclick = "exports.p1InPlayInput('onTwo')">Hit on two</button>
+      <button onclick = "exports.p1InPlayInput('onThree')">Hit on three</button>
+      <button onclick = "exports.p1InPlayInput('noHit')">No hit</button>
+    </div>
+    <div id="point1hitResult">
+      <h2>Result of the hit</h2>
+      <button id = "p1dt1button" onclick = "exports.p1HitInput('dTouch1')"></button>
+      <button id = "p1dt2button" onclick = "exports.p1HitInput('dTouch2')"></button>
+      <button onclick = "exports.p1HitInput('kill')">Kill shot</button>
+      <button onclick = "exports.p1HitInput('miss')">Miss</button>
+    </div>
+    <div id = "point1continue">
+      <h2>Continue?</h2>
+      <button onclick = "exports.nextPoint(true)">Continue</button>
+      <button>Restart</button>
+    </div>
+    <div id= "secondServer">
+      <h2>Who served second?</h2>
+      <button id = "p1serve" onclick = "exports.secondServeSet(player1.name)"></button>
+      <button id = "p2serve" onclick = "exports.secondServeSet(player2.name)"></button>
+      <button id = "p3serve" onclick = "exports.secondServeSet(player3.name)"></button>
+      <button id = "p4serve" onclick = "exports.secondServeSet(player4.name)"></button>
+    </div>
+    <div id="genServe1">
+      <h2>First serve</h2>
+      <button onclick = "exports.genServeResult(1, 'fault')">Fault</button>
+      <button onclick = "exports.genServeResult(1, 'ace')">Ace</button>
+      <button onclick = "exports.genServeResult(1, 'inPlay')">In Play</button>
+    </div>
+    <div id="genServe2">
+      <h2>Second Serve</h2>
+      <button onclick = "exports.genServeResult(2, 'fault')">Fault</button>
+      <button onclick = "exports.genServeResult(2, 'ace')">Ace</button>
+      <button onclick = "exports.genServeResult(2, 'inPlay')">In Play</button>
+    </div>
+    <div id="genInPlay">
+      <h2>Ball in play</h2>
+      <button onclick = "exports.genInPlayResult('onOne')">Hit on one</button>
+      <button onclick = "exports.genInPlayResult('onTwo')">Hit on two</button>
+      <button onclick = "exports.genInPlayResult('onThree')">Hit on three</button>
+      <button onclick = "exports.genInPlayResult('noHit')">No Hit</button>
+    </div>
+    <div id="genHitResult">
+      <h2>Result of the play</h2>
+      <button id = "dt1button" onclick = "exports.genHitResult('dTouch1')"></button>
+      <button id = "dt2button" onclick = "exports.genHitResult('dTouch2')"></button>
+      <button onclick = "exports.genHitResult('kill')">Kill Shot</button>
+      <button onclick = "exports.genHitResult('miss')">Miss</button>
+    </div>
+    <div id = "genContinue">
+      <h2>Continue?</h2>
+      <button onclick = "exports.nextPoint(false)">Continue</button>
+      <button>Restart</button>
+    </div>
+    <div id = "gameOver">
+      <h2>Game Over</h2>
+
+    </div>
+    <br></br>
+    <button>Manual End Game (testing)</button>
+  </body>
+</html>
