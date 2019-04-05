@@ -2,6 +2,7 @@
 {% block content %}
     {% for game in games %}
 		<article class="media content-section">
+			<img class="rounded-circle article-img" src="{{ game.creator.profile.image.url }}" >
 		  <div class="media-body">
 		    <div class="article-metadata">
 		      <a class="mr-2" href="#">{{ game.creator }}</a>
