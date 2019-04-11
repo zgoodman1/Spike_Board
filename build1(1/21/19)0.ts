@@ -87,10 +87,10 @@ let attackingPlayer: Player;
 let ballInPlay: boolean;
 let numberOfShotsIP: number = 0;
 let numberOfRallies: number = 0;
-let tempPlayer1: Player;
-let tempPlayer2: Player;
-let tempPlayer3: Player;
-let tempPlayer4: Player;
+let updatedPlayer1 = new Player();
+let updatedPlayer2 = new Player();
+let updatedPlayer3 = new Player();
+let updatedPlayer4 = new Player();
 let resetInput = false;
 let team1 = new Team();
 let team2 = new Team();
@@ -101,6 +101,9 @@ let player4 = new Player();
 //------------------------
 let gameTo = 0;
 let initialServer = new Player();
+let statsTable = new Array();
+let statsView = false;
+let table;
 //document.getElementById("team1Names").style.display="block";
 
 /*tempPlayer1 = player1;
@@ -202,19 +205,23 @@ export let continueButton = (currID: string): void => {
   if(currID == "team1Names"){
     team1.name = (<HTMLInputElement>document.getElementById("t1name")).value;
     player1.name = (<HTMLInputElement>document.getElementById("p1name")).value;
+    updatedPlayer1.name = (<HTMLInputElement>document.getElementById("p1name")).value;
     document.getElementById("p1button").innerHTML = player1.name;
     player2.name = (<HTMLInputElement>document.getElementById("p2name")).value;
+    updatedPlayer2.name = (<HTMLInputElement>document.getElementById("p2name")).value;
     document.getElementById("p2button").innerHTML = player2.name;
     team1.player1 = player1;
     team1.player2 = player2;
     console.log(team1.name + player1.name + player2.name);
-    document.getElementById("team2Names").style.display="block";
+    //document.getElementById("team2Names").style.display="block";
   }
   else if(currID == "team2Names"){
     team2.name = (<HTMLInputElement>document.getElementById("t2name")).value;
     player3.name = (<HTMLInputElement>document.getElementById("p3name")).value;
+    updatedPlayer3.name = (<HTMLInputElement>document.getElementById("p3name")).value;
     document.getElementById("p3button").innerHTML = player3.name;
     player4.name = (<HTMLInputElement>document.getElementById("p4name")).value;
+    updatedPlayer4.name = (<HTMLInputElement>document.getElementById("p4name")).value;
     document.getElementById("p4button").innerHTML = player4.name;
     console.log(team2.name + player3.name + player4.name);
     team2.player1 = player3;
@@ -226,6 +233,7 @@ export let continueButton = (currID: string): void => {
     document.getElementById("firstServer").style.display="block";
   }
   document.getElementById(currID).style.display="none";
+  document.getElementById("teamNameWrapper").style.display="none";
 };
 
 
@@ -291,7 +299,7 @@ export let playerClick = (currID: string, player: string): void =>{
           returningOrder = [player3, player1, player4, player2];
         }
         else{
-          returningOrder = [player3, player1, player4, player2];
+          returningOrder = [player3, player2, player4, player1];
         }
       }
       else if(player == "player4"){
@@ -299,15 +307,16 @@ export let playerClick = (currID: string, player: string): void =>{
           returningOrder = [player4, player2, player3, player1];
         }
         else{
-          returningOrder = [player4, player2, player3, player1];
+          returningOrder = [player4, player1, player3, player2];
         }
       }
       isReturning = returningOrder[0];
       document.getElementById("point1serve1").style.display="block";
-      tempPlayer1 = player1;
-      tempPlayer2 = player2;
-      tempPlayer3 = player3;
-      tempPlayer4 = player4;
+      /*tempPlayer1 = createPlayerCopy(player1);
+      tempPlayer2 = createPlayerCopy(player2);
+      tempPlayer3 = createPlayerCopy(player3);
+      tempPlayer4 = createPlayerCopy(player4);
+      console.log("created temp save");*/
       serve = 1;
       isServing.firstServeTotal += 1;
   }
@@ -423,12 +432,14 @@ export let nextPoint = (pointOne: boolean):void =>{
       document.getElementById("secondServer").style.display = "none";
       document.getElementById("point1serve1").style.display = "none";
       document.getElementById("gameOver").style.display = "block";
+      /*statsTable.push(["Player Name", "First Serve Percentage", "Second Serve Percentage", "Kill Percentage"])
       for (let i = 0; i < 4; i++) {
-          servingOrder[i].calc();
-          console.log(servingOrder[i]);
+          let currPlayer = servingOrder[i];
+          currPlayer.calc();
+          statsTable.push([currPlayer.name, currPlayer.firstServePercentage.toString(), currPlayer.secondServePercentage.toString(), currPlayer.killPercentage.toString()])
       }
       console.log("Number of Rallies " + numberOfRallies);
-      console.log("Number of Aces " + getNumberOfAces(servingOrder));
+      console.log("Number of Aces " + getNumberOfAces(servingOrder));*/
     }
   }
   else{
@@ -472,13 +483,15 @@ export let nextPoint = (pointOne: boolean):void =>{
     }
     document.getElementById("genServe1").style.display = "block";
     document.getElementById("genContinue").style.display = "none";
+    serve = 1;
+    isServing.firstServeTotal += 1;
   }
-  tempPlayer1 = player1;
-  tempPlayer2 = player2;
-  tempPlayer3 = player3;
-  tempPlayer4 = player4;
-  serve = 1;
-  isServing.firstServeTotal += 1;
+  /*tempPlayer1 = createPlayerCopy(player1);
+  tempPlayer2 = createPlayerCopy(player2);
+  tempPlayer3 = createPlayerCopy(player3);
+  tempPlayer4 = createPlayerCopy(player4);
+  console.log("created temp save");*/
+
   if (numberOfShotsIP > 2) {
       numberOfRallies += 1;
   }
@@ -486,13 +499,20 @@ export let nextPoint = (pointOne: boolean):void =>{
     isServing.firstServeTotal -= 1;
     document.getElementById("genServe1").style.display = "none";
     document.getElementById("gameOver").style.display = "block";
+
+    statsTable.push(["Player Name", "First Serve Percentage", "Second Serve Percentage", "Kill Percentage", "Defensive Touches", "Breaks Given Up"]);
     for (let i = 0; i < 4; i++) {
-        servingOrder[i].calc();
-        console.log(servingOrder[i]);
+        let currPlayer = servingOrder[i];
+        currPlayer.calc();
+        statsTable.push([currPlayer.name, currPlayer.firstServePercentage.toString(), currPlayer.secondServePercentage.toString(), currPlayer.killPercentage.toString(), currPlayer.numberOfDefensiveTouches.toString(), currPlayer.numberOfBreaksWhenReturning.toString()]);
     }
     console.log("Number of Rallies " + numberOfRallies);
     console.log("Number of Aces " + getNumberOfAces(servingOrder));
   }
+  updatedPlayer1 = copyPlayer(player1);
+  updatedPlayer2 = copyPlayer(player2);
+  updatedPlayer3 = copyPlayer(player3);
+  updatedPlayer4 = copyPlayer(player4);
 }
 
 export let secondServeSet = (player: string): void =>{
@@ -508,10 +528,11 @@ export let secondServeSet = (player: string): void =>{
   isReturning = swapReturner(returningOrder);
   teamServing = swapServingTeam(teamServingOrder);
   console.log("Serving: " + isServing.name + "Returning: " + isReturning.name);
-  tempPlayer1 = player1;
-  tempPlayer2 = player2;
-  tempPlayer3 = player3;
-  tempPlayer4 = player4;
+  /*tempPlayer1 = createPlayerCopy(player1);
+  tempPlayer2 = createPlayerCopy(player2);
+  tempPlayer3 = createPlayerCopy(player3);
+  tempPlayer4 = createPlayerCopy(player4);
+  console.log("created temp save");*/
   serve = 1;
   isServing.firstServeTotal += 1;
   document.getElementById("genServe1").style.display = "block";
@@ -600,6 +621,68 @@ export let genHitResult = (input: string): void =>{
   document.getElementById("genHitResult").style.display = "none";
 }
 
+export let showStats = (): void =>{
+  if(statsView == true){
+    return;
+  }
+  else{
+    statsView = true;
+    table = <HTMLTableElement>document.createElement("TABLE");
+    table.border = "1";
+
+    let numColumns = statsTable[0].length;
+
+    let currRow = table.insertRow(-1);
+    for(let i = 0; i<numColumns; i++){
+      var headerCell = document.createElement("TH");
+      headerCell.innerHTML = statsTable[0][i];
+      currRow.appendChild(headerCell);
+    }
+
+    for(let i = 1; i< statsTable.length; i++){
+      let row = table.insertRow(-1);
+      for(let j = 0; j<numColumns; j++){
+        let cell = row.insertCell(-1);
+        cell.innerHTML = statsTable[i][j];
+      }
+    }
+  }
+
+  var statsDiv = document.getElementById("statsDiv");
+  statsDiv.appendChild(table);
+  statsDiv.style.display = "block";
+}
+
+export let resetCurrentPoint = (pointOne: boolean): void =>{
+
+
+    player1 = null;
+    player2 = null;
+    player3 = null;
+    player4 = null;
+
+    player1 = copyPlayer(updatedPlayer1);
+    player2 = copyPlayer(updatedPlayer2);
+    player3 = copyPlayer(updatedPlayer3);
+    player4 = copyPlayer(updatedPlayer4);
+
+
+
+    console.log("reverted to Temp");
+  if(pointOne){
+    document.getElementById("point1continue").style.display = "none";
+    document.getElementById("point1serve1").style.display = "block";
+    serve = 1;
+  }
+  else{
+    document.getElementById("genContinue").style.display = "none";
+    document.getElementById("genServe1").style.display = "block";
+    serve = 1;
+  }
+}
+
+
+
 
 
 export let establishServingOrder = (sO: Player[]): void => {
@@ -675,6 +758,7 @@ export let ace = (): void => {
     isReturning.numberOfTimesAced += 1;
     isReturning.numberOfBreaksWhenReturning += 1;
     pointWinner = teamServing;
+    console.log("aced");
 };
 
 // Start ball in play
@@ -756,10 +840,10 @@ export let player2DT = ():void => {
 };
 
 export let swapAttacker = (rp: Player): Player => {
-    if (defendingPlayer === teamDefending.player1) {
-        return teamDefending.player2;
-    } else if (defendingPlayer === teamDefending.player2) {
-        return teamDefending.player1;
+    if (rp === teamAttacking.player1) {
+        return teamAttacking.player2;
+    } else if (rp === teamAttacking.player2) {
+        return teamAttacking.player1;
     } else {
         return teamAttacking.player1;
     }
@@ -783,9 +867,41 @@ export let getNumberOfAces = (data: Player[]): number => {
     return result;
 };
 
-export let resetPoint = ():void => {
+/*export let resetPoint = ():void => {
     player1 = tempPlayer1;
     player2 = tempPlayer2;
     player3 = tempPlayer3;
     player4 = tempPlayer4;
+}*/
+
+export let copyPlayer = (player: Player): Player => {
+  let updatedPlayer = new Player();
+  //let updatedPlayer = Object.assign({},player);
+  updatedPlayer.name = player.name;
+  updatedPlayer.team= player.team;
+  updatedPlayer.firstServesOn = player.firstServesOn;
+  updatedPlayer.firstServeTotal = player.firstServeTotal;
+  updatedPlayer.firstServePercentage = player.firstServePercentage;
+  updatedPlayer.numberofAces = player.numberofAces;
+  updatedPlayer.numberOfFaults = player.numberOfFaults;
+  updatedPlayer.secondServeTotal = player.secondServeTotal;
+  updatedPlayer.secondServeMade = player.secondServeMade;
+  updatedPlayer.secondServeAces = player.secondServeAces;
+  updatedPlayer.secondServePercentage = player.secondServePercentage;
+  updatedPlayer.numberOfBreaksOnServe = player.numberOfBreaksOnServe;
+  updatedPlayer.numberOfTimesAced = player.numberOfTimesAced;
+  updatedPlayer.numberOfBreaksWhenReturning = player.numberOfBreaksWhenReturning;
+  updatedPlayer.dTOn1stServe = player.dTOn1stServe;
+  updatedPlayer.dTon2ndServe = player.dTon2ndServe;
+  updatedPlayer.numberOfDefensiveTouches = player.numberOfDefensiveTouches;
+  updatedPlayer.numberOfDefensiveTouchesNotReturned = player.numberOfDefensiveTouchesNotReturned;
+  updatedPlayer.downOn1 = player.downOn1;
+  updatedPlayer.downOn2 = player.downOn2;
+  updatedPlayer.hitsOn = player.hitsOn;
+  updatedPlayer.kills = player.kills;
+  updatedPlayer.totalHits = player.totalHits;
+  updatedPlayer.hittingPercentage = player.hittingPercentage;
+  updatedPlayer.killPercentage = player.killPercentage;
+
+  return updatedPlayer;
 }

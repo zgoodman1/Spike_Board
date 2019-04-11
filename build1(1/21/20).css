@@ -1,14 +1,175 @@
-div{
+html{
+  height:100vh;
+}
+body{
+  margin:0px;
+  height:100vh;
+}
+h2{
+  color:white;
+  font-size:5vh;
+}
+p{
+  color:white;
+}
+
+#mainPane{
+  background-image: linear-gradient(to right, #f2994a, #f2c94c);
+  width:100vw;
+  height:80%;
+  margin:auto;
+
+  padding-top:1vh;
+}
+
+
+
+.buttonPane{
+  width:50%;
+  height:60%;
   display:none;
+  margin:auto;
+  text-align:center;
+  background-color:#386f9c;
+  border-radius: 5px;
+  margin-top:5vh;
+  padding-top:8%;
+  position:relative;
 }
 
 #team1Names{
   display:block;
+  float:left;
+  margin-left:9vw;
+  margin-top:8vh;
+  width:35vw;
+  height:53vh;
+  text-align: center;
+  padding-top:0px;
 }
 
-#team1return{
-  display:block;
+#teamNameWrapper{
+  position:relative;
+  height:100%;
 }
-#team2return{
+
+#gameOver{
+  padding-top:2vh;
+  height:60vh;
+}
+#team2Names{
   display:block;
+  float:right;
+  width:35vw;
+  height:53vh;
+  text-align:center;
+  margin-top: 8vh;
+  margin-right:9vw;
+  padding-top:0px;
+}
+
+#setupContinueButton{
+  position:absolute;
+  bottom:5vh;;
+  left:42.5vw;
+  width:15vw;
+  height: 8vh;
+  background-color:#386f9c;
+  text-align:center;
+  border-radius:1vh;
+}
+
+
+/*buttons*/
+.genButton{
+  width:10vw;
+  height:5vh;
+  border-radius:5px;
+  border-style:solid;
+  border-width:.1vh;
+  background-color:white;
+  color:black;
+  margin:auto;
+  text-align:center;
+  font-size:3vh;
+  position:absolute;
+
+  padding-top:2vh;
+}
+
+.setupButton{
+  bottom:10vh;
+  left:20vw;
+}
+
+.buttonOne{
+  bottom:20vh;
+  left:13vw;
+}
+.buttonTwo{
+  bottom:20vh;
+  right:13vw;
+}
+.buttonThree{
+  bottom:9vh;
+  left:13vw;
+}
+.buttonFour{
+  bottom:9vh;
+  right:13vw;
+}
+.buttonFive{
+  bottom:9vh;
+  left:20vw;
+}
+
+#statsButton{
+  bottom:35vh;
+  left:20vw;
+}
+
+#title{
+  height:100%;
+  margin-top:-2vh;
+  float: left;
+  width:70vw;
+  padding-left:1vw;
+
+}
+.menuButton{
+  float:right;
+  width: 12vw;
+  text-align: center;
+  border-left-style:solid;
+  border-left-width:1px;
+  height:100%
+}
+#header{
+  height:9vh;
+  border-bottom-style:solid;
+  border-bottom-width:1px;
+  border-bottom-color:gray;
+}
+h1{
+  color:black;
+  font-size: 5vh;
+}
+.rightHeader{
+  color:black;
+  font-size: 1.5vw;
+}
+
+input{
+  width:15vw;
+  text-align:center;
+}
+
+#statsDiv{
+  display:none;
+  position:absolute;
+  background-color:white;
+  margin: auto;
+  height:fit-content;
+  width:fit-content;
+  bottom:8vh;
 }

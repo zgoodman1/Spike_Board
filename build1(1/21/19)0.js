@@ -88,10 +88,10 @@ var attackingPlayer;
 var ballInPlay;
 var numberOfShotsIP = 0;
 var numberOfRallies = 0;
-var tempPlayer1;
-var tempPlayer2;
-var tempPlayer3;
-var tempPlayer4;
+var updatedPlayer1 = new Player();
+var updatedPlayer2 = new Player();
+var updatedPlayer3 = new Player();
+var updatedPlayer4 = new Player();
 var resetInput = false;
 var team1 = new Team();
 var team2 = new Team();
@@ -102,6 +102,9 @@ var player4 = new Player();
 //------------------------
 var gameTo = 0;
 var initialServer = new Player();
+var statsTable = new Array();
+var statsView = false;
+var table;
 //document.getElementById("team1Names").style.display="block";
 /*tempPlayer1 = player1;
 tempPlayer2 = player2;
@@ -200,19 +203,23 @@ exports.continueButton = function (currID) {
     if (currID == "team1Names") {
         team1.name = document.getElementById("t1name").value;
         player1.name = document.getElementById("p1name").value;
+        updatedPlayer1.name = document.getElementById("p1name").value;
         document.getElementById("p1button").innerHTML = player1.name;
         player2.name = document.getElementById("p2name").value;
+        updatedPlayer2.name = document.getElementById("p2name").value;
         document.getElementById("p2button").innerHTML = player2.name;
         team1.player1 = player1;
         team1.player2 = player2;
         console.log(team1.name + player1.name + player2.name);
-        document.getElementById("team2Names").style.display = "block";
+        //document.getElementById("team2Names").style.display="block";
     }
     else if (currID == "team2Names") {
         team2.name = document.getElementById("t2name").value;
         player3.name = document.getElementById("p3name").value;
+        updatedPlayer3.name = document.getElementById("p3name").value;
         document.getElementById("p3button").innerHTML = player3.name;
         player4.name = document.getElementById("p4name").value;
+        updatedPlayer4.name = document.getElementById("p4name").value;
         document.getElementById("p4button").innerHTML = player4.name;
         console.log(team2.name + player3.name + player4.name);
         team2.player1 = player3;
@@ -224,6 +231,7 @@ exports.continueButton = function (currID) {
         document.getElementById("firstServer").style.display = "block";
     }
     document.getElementById(currID).style.display = "none";
+    document.getElementById("teamNameWrapper").style.display = "none";
 };
 //Player Click functionality (for screens 4 and 5 (first server))
 exports.playerClick = function (currID, player) {
@@ -286,7 +294,7 @@ exports.playerClick = function (currID, player) {
                 returningOrder = [player3, player1, player4, player2];
             }
             else {
-                returningOrder = [player3, player1, player4, player2];
+                returningOrder = [player3, player2, player4, player1];
             }
         }
         else if (player == "player4") {
@@ -294,15 +302,16 @@ exports.playerClick = function (currID, player) {
                 returningOrder = [player4, player2, player3, player1];
             }
             else {
-                returningOrder = [player4, player2, player3, player1];
+                returningOrder = [player4, player1, player3, player2];
             }
         }
         isReturning = returningOrder[0];
         document.getElementById("point1serve1").style.display = "block";
-        tempPlayer1 = player1;
-        tempPlayer2 = player2;
-        tempPlayer3 = player3;
-        tempPlayer4 = player4;
+        /*tempPlayer1 = createPlayerCopy(player1);
+        tempPlayer2 = createPlayerCopy(player2);
+        tempPlayer3 = createPlayerCopy(player3);
+        tempPlayer4 = createPlayerCopy(player4);
+        console.log("created temp save");*/
         serve = 1;
         isServing.firstServeTotal += 1;
     }
@@ -410,12 +419,14 @@ exports.nextPoint = function (pointOne) {
             document.getElementById("secondServer").style.display = "none";
             document.getElementById("point1serve1").style.display = "none";
             document.getElementById("gameOver").style.display = "block";
-            for (var i = 0; i < 4; i++) {
-                servingOrder[i].calc();
-                console.log(servingOrder[i]);
+            /*statsTable.push(["Player Name", "First Serve Percentage", "Second Serve Percentage", "Kill Percentage"])
+            for (let i = 0; i < 4; i++) {
+                let currPlayer = servingOrder[i];
+                currPlayer.calc();
+                statsTable.push([currPlayer.name, currPlayer.firstServePercentage.toString(), currPlayer.secondServePercentage.toString(), currPlayer.killPercentage.toString()])
             }
             console.log("Number of Rallies " + numberOfRallies);
-            console.log("Number of Aces " + exports.getNumberOfAces(servingOrder));
+            console.log("Number of Aces " + getNumberOfAces(servingOrder));*/
         }
     }
     else {
@@ -459,13 +470,14 @@ exports.nextPoint = function (pointOne) {
         }
         document.getElementById("genServe1").style.display = "block";
         document.getElementById("genContinue").style.display = "none";
+        serve = 1;
+        isServing.firstServeTotal += 1;
     }
-    tempPlayer1 = player1;
-    tempPlayer2 = player2;
-    tempPlayer3 = player3;
-    tempPlayer4 = player4;
-    serve = 1;
-    isServing.firstServeTotal += 1;
+    /*tempPlayer1 = createPlayerCopy(player1);
+    tempPlayer2 = createPlayerCopy(player2);
+    tempPlayer3 = createPlayerCopy(player3);
+    tempPlayer4 = createPlayerCopy(player4);
+    console.log("created temp save");*/
     if (numberOfShotsIP > 2) {
         numberOfRallies += 1;
     }
@@ -473,13 +485,19 @@ exports.nextPoint = function (pointOne) {
         isServing.firstServeTotal -= 1;
         document.getElementById("genServe1").style.display = "none";
         document.getElementById("gameOver").style.display = "block";
+        statsTable.push(["Player Name", "First Serve Percentage", "Second Serve Percentage", "Kill Percentage", "Defensive Touches", "Breaks Given Up"]);
         for (var i = 0; i < 4; i++) {
-            servingOrder[i].calc();
-            console.log(servingOrder[i]);
+            var currPlayer = servingOrder[i];
+            currPlayer.calc();
+            statsTable.push([currPlayer.name, currPlayer.firstServePercentage.toString(), currPlayer.secondServePercentage.toString(), currPlayer.killPercentage.toString(), currPlayer.numberOfDefensiveTouches.toString(), currPlayer.numberOfBreaksWhenReturning.toString()]);
         }
         console.log("Number of Rallies " + numberOfRallies);
         console.log("Number of Aces " + exports.getNumberOfAces(servingOrder));
     }
+    updatedPlayer1 = exports.copyPlayer(player1);
+    updatedPlayer2 = exports.copyPlayer(player2);
+    updatedPlayer3 = exports.copyPlayer(player3);
+    updatedPlayer4 = exports.copyPlayer(player4);
 };
 exports.secondServeSet = function (player) {
     if (player == player4.name) {
@@ -494,10 +512,11 @@ exports.secondServeSet = function (player) {
     isReturning = exports.swapReturner(returningOrder);
     teamServing = exports.swapServingTeam(teamServingOrder);
     console.log("Serving: " + isServing.name + "Returning: " + isReturning.name);
-    tempPlayer1 = player1;
-    tempPlayer2 = player2;
-    tempPlayer3 = player3;
-    tempPlayer4 = player4;
+    /*tempPlayer1 = createPlayerCopy(player1);
+    tempPlayer2 = createPlayerCopy(player2);
+    tempPlayer3 = createPlayerCopy(player3);
+    tempPlayer4 = createPlayerCopy(player4);
+    console.log("created temp save");*/
     serve = 1;
     isServing.firstServeTotal += 1;
     document.getElementById("genServe1").style.display = "block";
@@ -582,6 +601,54 @@ exports.genHitResult = function (input) {
     }
     document.getElementById("genHitResult").style.display = "none";
 };
+exports.showStats = function () {
+    if (statsView == true) {
+        return;
+    }
+    else {
+        statsView = true;
+        table = document.createElement("TABLE");
+        table.border = "1";
+        var numColumns = statsTable[0].length;
+        var currRow = table.insertRow(-1);
+        for (var i = 0; i < numColumns; i++) {
+            var headerCell = document.createElement("TH");
+            headerCell.innerHTML = statsTable[0][i];
+            currRow.appendChild(headerCell);
+        }
+        for (var i = 1; i < statsTable.length; i++) {
+            var row = table.insertRow(-1);
+            for (var j = 0; j < numColumns; j++) {
+                var cell = row.insertCell(-1);
+                cell.innerHTML = statsTable[i][j];
+            }
+        }
+    }
+    var statsDiv = document.getElementById("statsDiv");
+    statsDiv.appendChild(table);
+    statsDiv.style.display = "block";
+};
+exports.resetCurrentPoint = function (pointOne) {
+    player1 = null;
+    player2 = null;
+    player3 = null;
+    player4 = null;
+    player1 = exports.copyPlayer(updatedPlayer1);
+    player2 = exports.copyPlayer(updatedPlayer2);
+    player3 = exports.copyPlayer(updatedPlayer3);
+    player4 = exports.copyPlayer(updatedPlayer4);
+    console.log("reverted to Temp");
+    if (pointOne) {
+        document.getElementById("point1continue").style.display = "none";
+        document.getElementById("point1serve1").style.display = "block";
+        serve = 1;
+    }
+    else {
+        document.getElementById("genContinue").style.display = "none";
+        document.getElementById("genServe1").style.display = "block";
+        serve = 1;
+    }
+};
 exports.establishServingOrder = function (sO) {
     var temp = sO[1];
     sO[1] = sO[3];
@@ -651,6 +718,7 @@ exports.ace = function () {
     isReturning.numberOfTimesAced += 1;
     isReturning.numberOfBreaksWhenReturning += 1;
     pointWinner = teamServing;
+    console.log("aced");
 };
 // Start ball in play
 exports.inPlay = function () {
@@ -730,11 +798,11 @@ exports.player2DT = function () {
     }
 };
 exports.swapAttacker = function (rp) {
-    if (defendingPlayer === teamDefending.player1) {
-        return teamDefending.player2;
+    if (rp === teamAttacking.player1) {
+        return teamAttacking.player2;
     }
-    else if (defendingPlayer === teamDefending.player2) {
-        return teamDefending.player1;
+    else if (rp === teamAttacking.player2) {
+        return teamAttacking.player1;
     }
     else {
         return teamAttacking.player1;
@@ -756,9 +824,39 @@ exports.getNumberOfAces = function (data) {
     }
     return result;
 };
-exports.resetPoint = function () {
+/*export let resetPoint = ():void => {
     player1 = tempPlayer1;
     player2 = tempPlayer2;
     player3 = tempPlayer3;
     player4 = tempPlayer4;
+}*/
+exports.copyPlayer = function (player) {
+    var updatedPlayer = new Player();
+    //let updatedPlayer = Object.assign({},player);
+    updatedPlayer.name = player.name;
+    updatedPlayer.team = player.team;
+    updatedPlayer.firstServesOn = player.firstServesOn;
+    updatedPlayer.firstServeTotal = player.firstServeTotal;
+    updatedPlayer.firstServePercentage = player.firstServePercentage;
+    updatedPlayer.numberofAces = player.numberofAces;
+    updatedPlayer.numberOfFaults = player.numberOfFaults;
+    updatedPlayer.secondServeTotal = player.secondServeTotal;
+    updatedPlayer.secondServeMade = player.secondServeMade;
+    updatedPlayer.secondServeAces = player.secondServeAces;
+    updatedPlayer.secondServePercentage = player.secondServePercentage;
+    updatedPlayer.numberOfBreaksOnServe = player.numberOfBreaksOnServe;
+    updatedPlayer.numberOfTimesAced = player.numberOfTimesAced;
+    updatedPlayer.numberOfBreaksWhenReturning = player.numberOfBreaksWhenReturning;
+    updatedPlayer.dTOn1stServe = player.dTOn1stServe;
+    updatedPlayer.dTon2ndServe = player.dTon2ndServe;
+    updatedPlayer.numberOfDefensiveTouches = player.numberOfDefensiveTouches;
+    updatedPlayer.numberOfDefensiveTouchesNotReturned = player.numberOfDefensiveTouchesNotReturned;
+    updatedPlayer.downOn1 = player.downOn1;
+    updatedPlayer.downOn2 = player.downOn2;
+    updatedPlayer.hitsOn = player.hitsOn;
+    updatedPlayer.kills = player.kills;
+    updatedPlayer.totalHits = player.totalHits;
+    updatedPlayer.hittingPercentage = player.hittingPercentage;
+    updatedPlayer.killPercentage = player.killPercentage;
+    return updatedPlayer;
 };
