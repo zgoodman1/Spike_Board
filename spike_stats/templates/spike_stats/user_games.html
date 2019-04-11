@@ -1,5 +1,6 @@
 {% extends "spike_stats/base.html" %}
 {% block content %}
+    <h1 class="mb-3">Games from {{ view.kwargs.username }} ({{ page_obj.paginator.count }})</h1>
     {% for game in games %}
 		<article class="media content-section">
 			<img class="rounded-circle article-img" src="{{ game.creator.profile.image.url }}" >
